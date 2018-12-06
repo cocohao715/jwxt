@@ -1,0 +1,92 @@
+create table jwxt_info(
+openid varchar(32),
+account varchar(32) not null,
+password varchar(128) not null,
+creation_time timestamp,
+ primary key(openid,account)
+);
+create table class_schedule(
+account varchar(32) not null,
+place varchar(32) not null,
+teacher varchar(32) not null,
+course_name varchar(32) not null,
+course_number varchar(32) not null,
+week_range varchar(32) not null,
+week_type varchar(32) not null,
+session_start varchar(32) not null,
+session_end varchar(32) not null,
+week_number char(4) not null,
+term_range varchar(32) not null,
+creation_time timestamp,
+primary key(account,week_number,term_range,course_name,place,course_number)
+);
+
+create table class_update(
+account varchar(32) not null,
+update_time datetime not null,
+creation_time timestamp,
+primary key(account,update_time)
+);
+
+create table class_week(
+term_range varchar(32) not null,
+week_number char(4) not null,
+class_start datetime not null,
+class_end	datetime not null,
+creation_time timestamp,
+primary key(term_range,week_number)
+);
+
+create table empty_classroom(
+campus_type varchar(32) not null,
+classroom_building varchar(32) not null,
+classroom_name varchar(32) not null,
+classroom_number varchar(32) not null,
+classroom_capacity	varchar(32) not null,
+empty_date datetime not null,
+empty_time varchar(32) not null,
+creation_time timestamp,
+primary key(empty_date,empty_time,campus_type,classroom_building,classroom_name)
+);
+
+create table classroom_update(
+openid varchar(32) not null,
+creation_time timestamp,
+primary key(creation_time,openid)
+);
+
+create table person_info(
+account varchar(32),
+name varchar(32) not null,
+sex varchar(32) not null,
+department varchar(32) not null,
+profession varchar(32) not null,
+enrollment_date varchar(32) not null,
+clbum varchar(32) not null,
+grade varchar(32) not null,
+update_time datetime not null,
+creation_time timestamp,
+primary key(account)
+);
+
+create table score_data
+(
+account varchar(32) not null,
+name varchar(32) not null,
+term_range varchar(32) not null,
+course_name varchar(32) not null,
+course_type varchar(32) not null,
+exam_type varchar(32) not null,
+score float not null,
+hour_credit varchar(32) not null,
+update_time datetime not null,
+creation_time timestamp,
+primary key(account,term_range,course_name,course_type)
+);
+
+create table term(
+term_range varchar(32) not null,
+term_type varchar(32) not null,
+creation_time timestamp,
+primary key(term_range,term_type)
+)
