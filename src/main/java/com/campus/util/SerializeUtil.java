@@ -1,5 +1,6 @@
 package com.campus.util;
 
+
 import java.io.*;
 
 public class SerializeUtil {
@@ -8,14 +9,14 @@ public class SerializeUtil {
     //序列化
     public static byte [] serialize(Object obj){
         ObjectOutputStream obi=null;
-        bai=new ByteArrayOutputStream();
-        obi=new ObjectOutputStream(bai);
-        obi.writeObject(obj);
-        byte[] byt=bai.toByteArray();
-        return byt;
-    } catch (IOException e) {
         ByteArrayOutputStream bai=null;
         try {
+            bai=new ByteArrayOutputStream();
+            obi=new ObjectOutputStream(bai);
+            obi.writeObject(obj);
+            byte[] byt=bai.toByteArray();
+            return byt;
+        } catch (IOException e) {
             e.printStackTrace();
         }
         return null;
@@ -34,9 +35,6 @@ public class SerializeUtil {
 
             e.printStackTrace();
         }
-
-
         return null;
     }
-
 }

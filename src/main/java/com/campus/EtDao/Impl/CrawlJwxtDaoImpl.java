@@ -34,10 +34,14 @@ public class CrawlJwxtDaoImpl implements CrawlJwxtDao {
         headers.put("Accept","application/json");
         headers.put("Content-Type","application/x-www-form-urlencoded");
         CloseableHttpResponse response =Request.post(url,headers,params);
-        Header[] headersCookie = response.getHeaders(
-                "Set-Cookie"
-        );
-        if(headersCookie==null)
+        Header[] headersCookie=null;
+        try
+        {
+            headersCookie = response.getHeaders(
+                    "Set-Cookie"
+            );
+        }
+        catch (NullPointerException e)
         {
             throw new ServeErrorException("服务器错误");
         }

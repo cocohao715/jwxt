@@ -14,6 +14,8 @@ import com.campus.result.CodeMsg;
 import com.campus.result.Result;
 import com.campus.service.JwxtService;
 import com.campus.util.DateUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,7 +30,7 @@ public class JwxtController {
 
     @Autowired
     JwxtService jwxtService;
-
+    private Logger logger = LoggerFactory.getLogger(JwxtController.class);
     /**
      * 绑定
      *
@@ -97,18 +99,23 @@ public class JwxtController {
     @ResponseBody
     public Object getEmptyClassroom(@RequestParam(value = "openid") String openid, HttpServletRequest request) {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        String emptyTime = StringUtils.isEmpty(request.getParameter("emptytime")) ? null : request.getParameter("emptytime");
-        String emptyDate = StringUtils.isEmpty(request.getParameter("emptydate")) ? DateUtils.getNowDateString("yyyy-MM-dd") : request.getParameter("emptydate");
+        String emptyTime = request.getParameter("emptytime")==null? null : request.getParameter("emptytime");
+        String emptyDate = request.getParameter("emptydate")==null ? DateUtils.getNowDateString("yyyy-MM-dd") : request.getParameter("emptydate");
+        System.out.println(request.getParameter("emptydate"));
         String classroomBuilding = request.getParameter("building");
         try {
             EmptyClassroom emptyClassroom = new EmptyClassroom();
             emptyClassroom.setClassroomBuilding(classroomBuilding);
             emptyClassroom.setEmptyTime(emptyTime);
             emptyClassroom.setEmptyDate(DateUtils.getDate(emptyDate, "yyyy-MM-dd"));
-            List list = jwxtService.getEmptyClassroom(emptyClassroom);
+            List list = jwxtService.getEmptyClassroom(openid,emptyClassroom);
             return Result.success(list);
         } catch (ParseException e) {
             return CodeMsg.Format_ERROR;
+        }
+        catch (Exception e)
+        {
+            return CodeMsg.SERVER_ERROR;
         }
 
     }
@@ -230,4 +237,34 @@ public class JwxtController {
         }
 
     }
+
+    /**
+     * 删除绑定
+     *
+     * @param openid
+     * @return
+     */
+    @RequestMapping(value = "jwxtdelete", method = RequestMethod.POST)
+    @ResponseBody
+    public Object delete(@RequestParam(value = "openid") String openid) {
+
+        try {
+            int i=jwxtService.deleteJwxt(openid);
+            if(i>0)
+            {
+                return CodeMsg.SUCCESS;
+            }
+            else
+            {
+                return CodeMsg.SERVER_ERROR;
+            }
+        } catch (PasswordErrorException e) {
+            return CodeMsg.PASSWORD_ERROR;
+        } catch (ServeErrorException e) {
+            return CodeMsg.SERVER_ERROR;
+        }
+
+    }
+
+
 }

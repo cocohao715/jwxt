@@ -49,4 +49,10 @@ public class DateUtils {
 
         return  date1;
     }
+    public static String getDateString(Date date,String format) throws ParseException {
+
+        SimpleDateFormat sf = new SimpleDateFormat(format);
+        String date1 = sf.format(date);
+        return  date1;
+    }
 }
